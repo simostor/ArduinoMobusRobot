@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ModbusRtu.h>
 #include <Servo.h>
+#include <Functions.h>
 
 const int ledPin = 3;  // LED connected to digital pin 3 (PWM pin)
 
