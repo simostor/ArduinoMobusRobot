@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ModbusRtu.h>
 #include <Servo.h>
-#include <Functions.h>
+#include <CustomLibrary.h>
 
 const int ledPin = 3;  // LED connected to digital pin 3 (PWM pin)
 
@@ -25,6 +25,10 @@ Servo ShoulderServoA;
 Servo ShoulderServoB;
 Servo ElbowServo;
 
+// Control with potentiomenters (local control) or from PLC over modbus rtu (remote control)
+ControlMode controlMode = LocalControl; // Initially in local control
+
+
 void setup() {
   slave.begin(38400);  // baud-rate
   pinMode(ledPin, OUTPUT);  // Set the LED pin as an output
@@ -35,17 +39,21 @@ void setup() {
 }
 
 void loop() {
+
+
   // Reading inputs
   potVal1 = analogRead(A0);
   potVal2 = analogRead(A1);
   potVal3 = analogRead(A2);
   potVal4 = analogRead(A3);
 
-  // Updating modbus registers to be read
+if (controlMode == LocalControl){
   au16data[4] = map(potVal1, 0, 1023, 0, 180);
   au16data[5] = map(potVal2, 0, 1023, 0, 180); 
   au16data[6] = map(potVal3, 0, 1023, 0, 180);
-  au16data[7] = map(potVal4, 0, 1023, 0, 180); 
+  au16data[7] = map(potVal4, 0, 1023, 0, 180);
+}
+
   
   slave.poll(au16data, 20);
 
