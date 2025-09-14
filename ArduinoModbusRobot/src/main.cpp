@@ -3,7 +3,6 @@
 #include <Servo.h>
 #include <CustomLibrary.h>
 
-const int ledPin = 3;  // LED connected to digital pin 3 (PWM pin)
 
 uint16_t analogReceive1 = 0;
 uint16_t analogReceive2 = 0;
@@ -17,7 +16,6 @@ uint16_t potVal4 = 0;
 
 // registers in the slave
 uint16_t au16data[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-int counter = 0;
 
 Modbus slave(1, 0, 0);  // this is slave @1 and RS-232 or USB-FTDI
 Servo BaseServo;
@@ -31,7 +29,6 @@ ControlMode controlMode = LocalControl; // Initially in local control
 
 void setup() {
   slave.begin(38400);  // baud-rate
-  pinMode(ledPin, OUTPUT);  // Set the LED pin as an output
   BaseServo.attach(9);
   ShoulderServoA.attach(10);
   ShoulderServoB.attach(11);
@@ -47,34 +44,31 @@ void loop() {
   potVal3 = analogRead(A2);
   potVal4 = analogRead(A3);
 
-if (controlMode == LocalControl){
-  au16data[4] = map(potVal1, 0, 1023, 0, 180);
-  au16data[5] = map(potVal2, 0, 1023, 0, 180); 
-  au16data[6] = map(potVal3, 0, 1023, 0, 180);
-  au16data[7] = map(potVal4, 0, 1023, 0, 180);
-}
+  au16data[0] = map(potVal1, 0, 1023, 0, 180);
+  au16data[1] = map(potVal2, 0, 1023, 0, 180); 
+  au16data[2] = map(potVal3, 0, 1023, 0, 180);
+  au16data[3] = map(potVal4, 0, 1023, 0, 180);
 
-  
   slave.poll(au16data, 20);
 
+  au16data[10] = map(au16data[10], 0, 1023, 0, 180);
+  au16data[11] = map(au16data[11], 0, 1023, 0, 180); 
+  au16data[12] = map(au16data[12], 0, 1023, 0, 180);
+  au16data[13] = map(au16data[13], 0, 1023, 0, 180);
 
-
-  BaseServo.write(au16data[4]);
-  ShoulderServoA.write(au16data[5]);
-  ShoulderServoB.write(au16data[6]);
-  ElbowServo.write(au16data[7]);
+  if (controlMode == LocalControl){
+    BaseServo.write(au16data[0]);
+    ShoulderServoA.write(au16data[1]);
+    ShoulderServoB.write(au16data[2]);
+    ElbowServo.write(au16data[3]);
+  }
+  else if (controlMode == RemoteControl)
+  {
+    BaseServo.write(au16data[10]);
+    ShoulderServoA.write(au16data[11]);
+    ShoulderServoB.write(au16data[12]);
+    ElbowServo.write(au16data[13]);
+  }
 
 
 }
-
-
-
-// Functions
-void restrictServo(uint16_t servoValue)
-{
-  if (servoValue > 180) {
-    servoValue = 180;
-  } else if (servoValue <= 0) {
-    servoValue = 0;
-  }
-};
