@@ -8,20 +8,7 @@
 #include <Types.h>
 
 
-uint16_t analogReceive1 = 0;
-uint16_t analogReceive2 = 0;
-uint16_t analogReceive3 = 0;
-uint16_t analogReceive4 = 0;
-uint16_t potVal1 = 0;
-uint16_t potVal2 = 0;
-uint16_t potVal3 = 0;
-uint16_t potVal4 = 0;
-
-
-// registers in the slave
-uint16_t au16data[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-Modbus slave(1, 0, 0);  // this is slave @1 and RS-232 or USB-FTDI
+Modbus slave(MB_ID, 0, 0);  // this is slave @1 and RS-232 or USB-FTDI
 Servo BaseServo;
 Servo ShoulderServoA;
 Servo ShoulderServoB;
@@ -34,16 +21,16 @@ Watchdog MB_Watchdog;
 
 
 void setup() {
-  slave.begin(38400);  // baud-rate
-  BaseServo.attach(9);
-  ShoulderServoA.attach(10);
-  ShoulderServoB.attach(11);
-  ElbowServo.attach(6);
+  slave.begin(Modbus_BaudRate);  // baud-rate
+  BaseServo.attach(baseServoPin);
+  ShoulderServoA.attach(shoulderServoAPin);
+  ShoulderServoB.attach(shoulderServoBPin);
+  ElbowServo.attach(elbowServoPin);
   MB_Watchdog.setTimeout(watchdogTimeoutMax_ms);
 }
 
 void loop() {
-  slave.poll(au16data, 20);
+  slave.poll(au16data, sizeof(au16data)/sizeof(au16data[0]));
 
   MB_Watchdog.tick(au16data[8], millis());
 
@@ -57,7 +44,6 @@ void loop() {
   au16data[1] = map(potVal2, 0, 1023, 0, 180); 
   au16data[2] = map(potVal3, 0, 1023, 0, 180);
   au16data[3] = map(potVal4, 0, 1023, 0, 180);
-
   au16data[10] = map(au16data[10], 0, 1023, 0, 180);
   au16data[11] = map(au16data[11], 0, 1023, 0, 180); 
   au16data[12] = map(au16data[12], 0, 1023, 0, 180);

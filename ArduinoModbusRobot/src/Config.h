@@ -2,10 +2,15 @@
 #include <Arduino.h>
 
 // Inputs
-const int pot1 = A0;
-const int pot2 = A1;
-const int pot3 = A2;
-const int pot4 = A3;
+uint16_t potVal1 = 0;
+uint16_t potVal2 = 0;
+uint16_t potVal3 = 0;
+uint16_t potVal4 = 0;
+uint16_t analogReceive1 = 0;
+uint16_t analogReceive2 = 0;
+uint16_t analogReceive3 = 0;
+uint16_t analogReceive4 = 0;
+
 const int switch1 = 8;
 const int switch2 = 9;
 const int switch3 = 10;
@@ -13,12 +18,14 @@ const int switch4 = 11;
 
 // Outputs
 const int baseServoPin = 4;
-const int shoulderServo1Pin = 5;
-const int shoulderServo2Pin = 6;
+const int shoulderServoAPin = 5;
+const int shoulderServoBPin = 6;
 const int elbowServoPin = 7;
 
-// registers in the slave
-uint16_t modbusRegs[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // 0 - 9: Readable by 
+// Modbus
+const byte MB_ID = 1;
+uint16_t au16data[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+long int Modbus_BaudRate = 38400;
 
 // Joint limits
 uint16_t baseAngleMin = 0;
