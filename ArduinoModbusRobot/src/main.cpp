@@ -13,6 +13,15 @@ Servo BaseServo;
 Servo ShoulderServoA;
 Servo ShoulderServoB;
 Servo ElbowServo;
+uint16_t au16data[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+uint8_t SizeOfMBArray = 0;
+
+// Analog inputs
+uint16_t potVal1 = 0;
+uint16_t potVal2 = 0;
+uint16_t potVal3 = 0;
+uint16_t potVal4 = 0;
+
 
 // Control with potentiomenters (local control) or from PLC over modbus rtu (remote control)
 ControlMode controlMode = LocalControl; // Initially in local control
@@ -27,10 +36,11 @@ void setup() {
   ShoulderServoB.attach(shoulderServoBPin);
   ElbowServo.attach(elbowServoPin);
   MB_Watchdog.setTimeout(watchdogTimeoutMax_ms);
+  SizeOfMBArray = sizeof(au16data)/sizeof(au16data[0]);
 }
 
 void loop() {
-  slave.poll(au16data, sizeof(au16data)/sizeof(au16data[0]));
+  slave.poll(au16data, SizeOfMBArray);
 
   MB_Watchdog.tick(au16data[8], millis());
 
@@ -66,10 +76,10 @@ void loop() {
     }
     else
     {
-      BaseServo.write(90);
-      ShoulderServoA.write(90);
-      ShoulderServoB.write(90);
-      ElbowServo.write(90);
+      BaseServo.write(SafePos[0]);
+      ShoulderServoA.write(SafePos[1]);
+      ShoulderServoB.write(SafePos[2]);
+      ElbowServo.write(SafePos[3]);
     }
   }
 }
