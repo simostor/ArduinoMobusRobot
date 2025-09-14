@@ -2,6 +2,10 @@
 #include <ModbusRtu.h>
 #include <Servo.h>
 #include <CustomLibrary.h>
+#include <Config.h>
+#include <Safety.h>
+#include <Watchdog.h>
+#include <Types.h>
 
 
 uint16_t analogReceive1 = 0;
