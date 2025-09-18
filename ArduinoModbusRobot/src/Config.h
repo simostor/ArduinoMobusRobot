@@ -3,7 +3,7 @@
 
 
 
-constexpr uint8_t DI_LocalModeSwitch = 8; // 0 - remote, 1, local
+constexpr uint8_t DI_LocalModeSwitch = 11; // 0 - remote, 1, local
 constexpr uint8_t switch2 = 6;
 constexpr uint8_t switch3 = 7;
 constexpr uint8_t switch4 = 8;

@@ -46,7 +46,7 @@ void setup() {
 
 void loop() {
  // Reading inputs
-  const bool isLocalMode = (digitalRead(DI_LocalModeSwitch) == HIGH);
+  const bool isLocalMode = (digitalRead(DI_LocalModeSwitch) == LOW);
   potVal1 = analogRead(A0);
   potVal2 = analogRead(A1);
   potVal3 = analogRead(A2);
