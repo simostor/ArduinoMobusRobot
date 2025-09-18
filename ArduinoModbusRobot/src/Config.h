@@ -3,16 +3,16 @@
 
 
 
-constexpr uint8_t switch1 = 8;
-constexpr uint8_t switch2 = 9;
-constexpr uint8_t switch3 = 10;
-constexpr uint8_t switch4 = 11;
+constexpr uint8_t DI_LocalModeSwitch = 8; // 0 - remote, 1, local
+constexpr uint8_t switch2 = 6;
+constexpr uint8_t switch3 = 7;
+constexpr uint8_t switch4 = 8;
 
 // Outputs
 constexpr int baseServoPin = 4;
 constexpr int shoulderServoAPin = 5;
-constexpr int shoulderServoBPin = 6;
-constexpr int elbowServoPin = 7;
+constexpr int shoulderServoBPin = 9;
+constexpr int elbowServoPin = 10;
 
 // Modbus
 constexpr uint8_t MB_ID = 1;

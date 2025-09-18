@@ -35,20 +35,28 @@ void setup() {
   ShoulderServoA.attach(shoulderServoAPin);
   ShoulderServoB.attach(shoulderServoBPin);
   ElbowServo.attach(elbowServoPin);
+
+  // Defining functionality of pins:
+  pinMode(DI_LocalModeSwitch, INPUT_PULLUP);
+
+
   MB_Watchdog.setTimeout(watchdogTimeoutMax_ms);
   SizeOfMBArray = sizeof(au16data)/sizeof(au16data[0]);
 }
 
 void loop() {
-  slave.poll(au16data, SizeOfMBArray);
-
-  MB_Watchdog.tick(au16data[8], millis());
-
-  // Reading inputs
+ // Reading inputs
+  const bool isLocalMode = (digitalRead(DI_LocalModeSwitch) == HIGH);
   potVal1 = analogRead(A0);
   potVal2 = analogRead(A1);
   potVal3 = analogRead(A2);
   potVal4 = analogRead(A3);
+  
+  slave.poll(au16data, SizeOfMBArray);
+
+  MB_Watchdog.tick(au16data[8], millis());
+
+ 
 
   au16data[0] = map(potVal1, 0, 1023, 0, 180);
   au16data[1] = map(potVal2, 0, 1023, 0, 180); 
@@ -59,13 +67,15 @@ void loop() {
   au16data[12] = map(au16data[12], 0, 1023, 0, 180);
   au16data[13] = map(au16data[13], 0, 1023, 0, 180);
 
-  if (controlMode == LocalControl){
+
+
+  if (isLocalMode){
        BaseServo.write(au16data[0]);
        ShoulderServoA.write(au16data[1]);
        ShoulderServoB.write(au16data[2]);
        ElbowServo.write(au16data[3]);
      }
-  if (controlMode == RemoteControl)
+  else
   {
     if (MB_Watchdog.isOk())
     {
