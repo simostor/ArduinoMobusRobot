@@ -16,7 +16,7 @@ constexpr int elbowServoPin = 10;
 
 // Modbus
 constexpr uint8_t MB_ID = 1;
-constexpr long int Modbus_BaudRate = 38400;
+constexpr long int Modbus_BaudRate = 115200;
 
 // Joint limits
 constexpr uint16_t baseAngleMin = 0;

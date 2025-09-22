@@ -45,6 +45,11 @@ void setup() {
 }
 
 void loop() {
+slave.poll(au16data, SizeOfMBArray);
+au16data[0] = au16data[10];
+
+
+
 
   /* Commenting out to test modbus read write. Remove comment later
  // Reading inputs
