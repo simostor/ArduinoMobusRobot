@@ -45,6 +45,8 @@ void setup() {
 }
 
 void loop() {
+
+  /* Commenting out to test modbus read write. Remove comment later
  // Reading inputs
   const bool isLocalMode = (digitalRead(DI_LocalModeSwitch) == LOW);
   potVal1 = analogRead(A0);
@@ -92,4 +94,5 @@ void loop() {
       ElbowServo.write(SafePos[3]);
     }
   }
+  */
 }
