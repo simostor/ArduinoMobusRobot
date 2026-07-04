@@ -46,58 +46,9 @@ void setup() {
 
 void loop() {
 slave.poll(au16data, SizeOfMBArray);
-au16data[0] = au16data[10];
-
-
-
-
-  /* Commenting out to test modbus read write. Remove comment later
- // Reading inputs
-  const bool isLocalMode = (digitalRead(DI_LocalModeSwitch) == LOW);
-  potVal1 = analogRead(A0);
-  potVal2 = analogRead(A1);
-  potVal3 = analogRead(A2);
-  potVal4 = analogRead(A3);
-  
-  slave.poll(au16data, SizeOfMBArray);
-
-  MB_Watchdog.tick(au16data[8], millis());
-
- 
-
-  au16data[0] = map(potVal1, 0, 1023, 0, 180);
-  au16data[1] = map(potVal2, 0, 1023, 0, 180); 
-  au16data[2] = map(potVal3, 0, 1023, 0, 180);
-  au16data[3] = map(potVal4, 0, 1023, 0, 180);
-  au16data[10] = map(au16data[10], 0, 1023, 0, 180);
-  au16data[11] = map(au16data[11], 0, 1023, 0, 180); 
-  au16data[12] = map(au16data[12], 0, 1023, 0, 180);
-  au16data[13] = map(au16data[13], 0, 1023, 0, 180);
-
-
-
-  if (isLocalMode){
-       BaseServo.write(au16data[0]);
-       ShoulderServoA.write(au16data[1]);
-       ShoulderServoB.write(au16data[2]);
-       ElbowServo.write(au16data[3]);
-     }
-  else
-  {
-    if (MB_Watchdog.isOk())
-    {
-      BaseServo.write(au16data[10]);
-      ShoulderServoA.write(au16data[11]);
-      ShoulderServoB.write(au16data[12]);
-      ElbowServo.write(au16data[13]);
-    }
-    else
-    {
-      BaseServo.write(SafePos[0]);
-      ShoulderServoA.write(SafePos[1]);
-      ShoulderServoB.write(SafePos[2]);
-      ElbowServo.write(SafePos[3]);
-    }
-  }
-  */
+au16data[6] = au16data[15]; // Updating watchdog
+BaseServo.write(au16data[10]);
+ShoulderServoA.write(au16data[11]);
+ShoulderServoB.write(au16data[12]);
+ElbowServo.write(au16data[13]);
 }
